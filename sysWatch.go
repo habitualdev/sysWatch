@@ -54,49 +54,58 @@ func loop() {
 
 }
 
-func getSysEnabled(){
-	sysGet := exec.Command("systemctl","list-unit-files","--state=enabled")
-	stringsTableEnabledB, _ := sysGet.Output()
-	stringsTableEnabled = string(stringsTableEnabledB)
+func getSysEnabled() {
+	for {
+		displayStringEnabled = ""
+		sysGet := exec.Command("systemctl", "list-unit-files", "--state=enabled")
+		stringsTableEnabledB, _ := sysGet.Output()
+		stringsTableEnabled = string(stringsTableEnabledB)
 
-	lineSplit := strings.Split(stringsTableEnabled,"\n")
-	for _, line := range lineSplit{
-		if len(strings.Fields(line)) == 3 {
-			displayStringEnabled = displayStringEnabled + strings.Fields(line)[0] + "\n"
+		lineSplit := strings.Split(stringsTableEnabled, "\n")
+		for _, line := range lineSplit {
+			if len(strings.Fields(line)) == 3 {
+				displayStringEnabled = displayStringEnabled + strings.Fields(line)[0] + "\n"
+			}
 		}
+		time.Sleep(time.Second * 10)
 	}
-	time.Sleep(time.Second * 2)
 }
 
-func getSysDisabled(){
-	sysGet := exec.Command("systemctl","list-unit-files","--state=disabled")
-	stringsTableDisabledB, _ := sysGet.Output()
-	stringsTableDisabled = string(stringsTableDisabledB)
+func getSysDisabled() {
+	for {
+		displayStringDisabled = ""
+		sysGet := exec.Command("systemctl", "list-unit-files", "--state=disabled")
+		stringsTableDisabledB, _ := sysGet.Output()
+		stringsTableDisabled = string(stringsTableDisabledB)
 
-	lineSplit := strings.Split(stringsTableDisabled,"\n")
-	for _, line := range lineSplit{
-		if len(strings.Fields(line)) == 3 {
-			displayStringDisabled = displayStringDisabled + strings.Fields(line)[0] + "\n"
+		lineSplit := strings.Split(stringsTableDisabled, "\n")
+		for _, line := range lineSplit {
+			if len(strings.Fields(line)) == 3 {
+				displayStringDisabled = displayStringDisabled + strings.Fields(line)[0] + "\n"
+			}
 		}
+		time.Sleep(time.Second * 10)
 	}
-	time.Sleep(time.Second * 2)
 }
 
-func getSysRunning(){
-	sysGet := exec.Command("systemctl","list-units","--type=service","--state=active")
+func getSysRunning() {
+	for {
+		displayStringRunning = ""
+	sysGet := exec.Command("systemctl", "list-units", "--type=service", "--state=active")
 	stringsTableRunningB, _ := sysGet.Output()
 	stringsTableRunning = string(stringsTableRunningB)
 
-	lineSplit := strings.Split(stringsTableRunning,"\n")
-	for _, line := range lineSplit{
+	lineSplit := strings.Split(stringsTableRunning, "\n")
+	for _, line := range lineSplit {
 		if len(strings.Fields(line)) >= 5 {
 			if strings.Fields(line)[0] != strings.ToUpper(strings.Fields(line)[0]) {
 
-			displayStringRunning = displayStringRunning + strings.Fields(line)[0] + "\n"
-		}
+				displayStringRunning = displayStringRunning + strings.Fields(line)[0] + "\n"
+			}
 		}
 	}
-	time.Sleep(time.Second * 2)
+	time.Sleep(time.Second * 10)
+}
 }
 
 
